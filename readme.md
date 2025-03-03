@@ -26,32 +26,33 @@ A plugin for VirtualDJ that generates multiple LFO (Low-Frequency Oscillator) si
 
 ## Installation
 
-1. Download the latest release from the [Releases](https://github.com/yourusername/vdj-lfo-plugin/releases) page
+1. Download the latest release from the [Releases](https://github.com/DrorT/vdjlfo/releases) page
 2. Copy the plugin file to your VirtualDJ plugins folder:
-   - Windows: `C:\Program Files\VirtualDJ\Plugins\` or `C:\Users\[YourUsername]\Documents\VirtualDJ\Plugins\`
-   - macOS: `/Applications/VirtualDJ/Plugins/` or `~/Documents/VirtualDJ/Plugins/`
+   - Windows: `C:\Users\[USERNAME]\AppData\Local\VirtualDJ\Plugins64\SoundEffect`
+   - macOS: ?
 3. Restart VirtualDJ
-4. The plugin should now appear in the Effects/Plugins list as "Multi LFO Generator"
+4. The plugin should now appear in the Effects/Plugins list as "vdjlfo"
 
 ## Usage
 
 ### Basic Setup
 
-1. Load the plugin in VirtualDJ
-2. Enable the plugin using the main "Enable Plugin" switch
-3. Configure each LFO you want to use:
+1. Load the plugin in VirtualDJ, on a specific deck or preferably on master
+2. Open the plugin setup
+3. Enable the LFOs you want to use (same for random value)
+4. Configure each LFO you want to use:
    - Enable the LFO with its own enable switch
    - Set the LFO type, frequency, amplitude, etc.
-   - Set a variable name for the LFO (e.g., "lfo_1", "filter_mod", etc.)
-4. If desired, enable the random generator and set its update interval and variable name
+   - Variable name are set to "$lfo_1", "$lfo_2", "$lfo_3", "$lfo_4", "$random_value" (can be changed in ini file)
+5. If desired, enable the random generator and set its update interval and variable name
 
 ### Using LFO Values in VirtualDJ
 
-Once configured, the plugin continuously updates the variables you've specified. These variables can be used in:
+Once configured, the plugin continuously updates the variables you've specified. These variables can be used in scripts -
 
-- **VDJScript**: Access variables in your scripts with `%variable_name%`
-- **Mappings**: Use variables in MIDI/controller mappings
-- **Actions**: Create custom actions that respond to variable changes
+`repeat_start 'lfo_example' 25ms 1000 & get_var '$random_value' & param_cast float & deck 1 level`
+
+`repeat_start 'lfo_example' 25ms 1000 & get_var '$lfo_1' & param_cast float & deck 1 pitch`
 
 ### LFO Types
 
@@ -60,14 +61,6 @@ Once configured, the plugin continuously updates the variables you've specified.
 3. **Square**: Alternates between min and max values
 4. **Triangle**: Linear ramp up, then linear ramp down
 5. **Random**: Random values that change at LFO cycle boundaries
-
-### Example Use Cases
-
-- **Automated Filter Modulation**: Map an LFO to a filter cutoff parameter
-- **Tempo-Synced Effects**: Set LFO frequency to match song BPM divisions
-- **Dynamic EQ Changes**: Use an LFO to slowly modulate EQ parameters
-- **Random Track Selection**: Use the random generator to select tracks
-- **Visual Effects**: Drive video effects with LFO values
 
 ## Parameter Details
 
@@ -85,40 +78,34 @@ For each of the four LFOs:
 - **LFO x Amp**: Amplitude (controls the range of values generated)
 - **LFO x Phase**: Starting phase/offset in the cycle (0.0-1.0)
 - **LFO x Offset**: Center value around which the LFO oscillates
-- **LFO x Variable**: VirtualDJ variable name where the value is stored
+- **LFO x Variable**: $lfo_1, $lfo_2, $lfo_3, $lfo_4 (can be changed in the ini file)
 
 ### Random Generator Settings
 
 - **Enable Random**: Turns the random generator on/off
 - **Random Interval**: How often (in seconds) to generate a new random value
-- **Random Variable**: VirtualDJ variable name where the random value is stored
+- **Random Variable**: $random_value (can be changed in the ini file)
 
 ## Building from Source
 
 ### Prerequisites
 
-- C++ compiler (Visual Studio for Windows, Xcode for Mac)
-- VirtualDJ SDK
+- C++ compiler - Visual Studio for Windows
 
 ### Windows (Visual Studio)
 
-1. Create a new DLL project
-2. Add the source files and VirtualDJ SDK headers
-3. Configure for x64 (or x86 if needed)
-4. Build the solution
+- 1st time compiling on windows (only did c++ on linux before), hopefully you can just use the same sln file in visual studio code
+- just build and you will get the DLL
 
 ### macOS (Xcode)
 
-1. Create a new Bundle project
-2. Add the source files and VirtualDJ SDK headers
-3. Set the bundle extension to ".bundle"
-4. Build the project
+I do not have mac to try to build for mac, so if you can check if it works and create a PR with updates
 
 ## License
 
-[MIT License](LICENSE)
+[MIT License](LICENSE) - fork it, use it, change it, you can mention this original repo or not (I think that what MIT means)
 
 ## Acknowledgments
 
 - Built using the VirtualDJ Plugin SDK
-- Inspired by the need for modulation sources in DJ software
+- Written with the help of Clause ai, and github co-pilot to figure out how to build it
